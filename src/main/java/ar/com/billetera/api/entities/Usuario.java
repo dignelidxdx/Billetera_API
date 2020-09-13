@@ -2,13 +2,28 @@ package ar.com.billetera.api.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity(name = "usuario")
 public class Usuario {
 
+    @Id
+    @Column(name = "usuario_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer usuarioId;
     private String username;
     private String password;
     private String email;
+    @Column(name = "fecha_login")
     private Date fechaLogin;
+    @OneToOne
+    @JoinColumn(name = "persona_id", referencedColumnName = "persona_id")
     private Persona persona;
 
     public Integer getUsuarioId() {

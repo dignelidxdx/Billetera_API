@@ -11,17 +11,28 @@ public class Persona {
     @Column(name = "persona_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer personaId;
+
     private String nombre;
+
+    @Column(name = "pais_id")
     private Integer paisId;
+
+    @Column(name = "tipo_documento")
     private Integer tipoDocumentoId;
+
     private String documento;
+
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
+
+    @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
     private Usuario usuario;
+
     @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
     private Billetera billetera;
 
     public Integer getPersonaId() {
-        return personaId;
+        return this.personaId;
     }
 
     public void setPersonaId(Integer personaId) {
@@ -29,7 +40,7 @@ public class Persona {
     }
 
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
     public void setNombre(String nombre) {
@@ -37,7 +48,7 @@ public class Persona {
     }
 
     public Integer getPaisId() {
-        return paisId;
+        return this.paisId;
     }
 
     public void setPaisId(Integer paisId) {
@@ -45,7 +56,7 @@ public class Persona {
     }
 
     public Integer getTipoDocumentoId() {
-        return tipoDocumentoId;
+        return this.tipoDocumentoId;
     }
 
     public void setTipoDocumentoId(Integer tipoDocumentoId) {
@@ -53,7 +64,7 @@ public class Persona {
     }
 
     public String getDocumento() {
-        return documento;
+        return this.documento;
     }
 
     public void setDocumento(String documento) {
@@ -61,7 +72,7 @@ public class Persona {
     }
 
     public Date getFechaNacimiento() {
-        return fechaNacimiento;
+        return this.fechaNacimiento;
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
@@ -69,17 +80,19 @@ public class Persona {
     }
 
     public Usuario getUsuario() {
-        return usuario;
+        return this.usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        this.usuario.setPersona(this);
     }
 
     public Billetera getBilletera() {
         return billetera;
     }
 
+    //La relación bidireccional se hace a traves del set
     public void setBilletera(Billetera billetera) {
         this.billetera = billetera;
         this.billetera.setPersona(this);

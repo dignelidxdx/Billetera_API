@@ -5,11 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
 @Entity(name = "billetera")
 public class Billetera {
     
@@ -45,5 +40,9 @@ public class Billetera {
 
     public void setCuentas(List<Cuenta> cuentas) {
         this.cuentas = cuentas;
+    }
+    public void agregarCuenta(Cuenta cuenta) {
+        this.cuentas.add(cuenta);
+        cuenta.setBilletera(this);
     }
 }

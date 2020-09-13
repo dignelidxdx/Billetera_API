@@ -4,12 +4,21 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
+
+@Entity(name = "cuenta")
 public class Cuenta {
 
+    @Id
+    @Column(name = "cuenta_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cuentaId;
     private BigDecimal saldo;
     private String moneda;
+    @ManyToOne
+    @JoinColumn(name = "billetera_id", referencedColumnName = "billetera_id")
     private Billetera billetera;
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaccion> transacciones = new ArrayList<>();
 
     public Integer getCuentaId() {
@@ -50,6 +59,12 @@ public class Cuenta {
 
     public void setTransacciones(List<Transaccion> transacciones) {
         this.transacciones = transacciones;
+    }
+
+    // La relacion bidireccional se hace a traves de un metodo que agrega a la lista de transacciones, una cuenta!
+    public void agregarTransaccion(Transaccion transaccion){
+        this.transacciones.add(transaccion);
+        transaccion.setCuenta(this);
     }
     
 }
