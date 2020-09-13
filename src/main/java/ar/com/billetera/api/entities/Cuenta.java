@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-
+// Se identifica la cuenta por la moneda
+//La idea es hacerle la vida mas facil a las personas bacarisandolas
 @Entity(name = "cuenta")
 public class Cuenta {
 
