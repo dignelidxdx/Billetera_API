@@ -8,4 +8,6 @@ import ar.com.billetera.api.entities.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
     
+    public Usuario findByUsername(String userName);
+    public Usuario findByEmail(String email);
 }

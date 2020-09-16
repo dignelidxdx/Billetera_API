@@ -1,10 +1,16 @@
 package ar.com.billetera.api.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import ar.com.billetera.api.entities.Usuario;
+import ar.com.billetera.api.repos.UsuarioRepository;
 
 @Service
 public class UsuarioService {
     
+    @Autowired
+    UsuarioRepository usuarioRepository;
     /*
     conceptualmente se crea el usuario de primero 1. -> Crear usuario
     Casos de uso, crear un dibujito simple de como va
@@ -19,5 +25,10 @@ public class UsuarioService {
     2.3 Devolver un verdadero o falso
 
     */
+
+
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+      }
 
 }
