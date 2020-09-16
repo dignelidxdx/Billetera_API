@@ -7,7 +7,10 @@ import java.util.List;
 import javax.persistence.*;
 // Se identifica la cuenta por la moneda
 //La idea es hacerle la vida mas facil a las personas bacarisandolas
-@Entity(name = "cuenta")
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "cuenta")
 public class Cuenta {
 
     @Id
@@ -16,11 +19,14 @@ public class Cuenta {
     private Integer cuentaId;
     private BigDecimal saldo;
     private String moneda;
+
     @ManyToOne
     @JoinColumn(name = "billetera_id", referencedColumnName = "billetera_id")
     private Billetera billetera;
-    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
     private List<Transaccion> transacciones = new ArrayList<>();
+
 
     public Integer getCuentaId() {
         return cuentaId;

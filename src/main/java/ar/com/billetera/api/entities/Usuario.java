@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-@Entity(name = "usuario")
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -20,8 +22,10 @@ public class Usuario {
     private String username;
     private String password;
     private String email;
+
     @Column(name = "fecha_login")
     private Date fechaLogin;
+    
     @OneToOne
     @JoinColumn(name = "persona_id", referencedColumnName = "persona_id")
     private Persona persona;

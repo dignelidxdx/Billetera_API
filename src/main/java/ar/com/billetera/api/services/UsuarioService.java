@@ -1,34 +1,106 @@
 package ar.com.billetera.api.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import ar.com.billetera.api.entities.Persona;
 import ar.com.billetera.api.entities.Usuario;
 import ar.com.billetera.api.repos.UsuarioRepository;
+import ar.com.billetera.api.security.Crypto;
 
 @Service
 public class UsuarioService {
     
     @Autowired
     UsuarioRepository usuarioRepository;
-    /*
-    conceptualmente se crea el usuario de primero 1. -> Crear usuario
-    Casos de uso, crear un dibujito simple de como va
-     "yo soy un usuario y quiero registrar" ¿Qué va primero?
-    1.2 -> Crear una Persona
-    1.3 -> Crear una billetera(setearle una persona) y una unica cuenta en pesos, y una en dolares. Crear nueva cuenta (euro)
-    1.4 ->Crear una cuenta en pesos y otra en dolares
 
-    2. Metodo: Iniciar Sesion
-    2.1 recibe el username y la password
-    2.2 Vamos a validar los datos
-    2.3 Devolver un verdadero o falso
+    @Autowired
+    PersonaService personaService;
 
-    */
+    public Usuario login(String username, String password) {
 
-
+        /**
+         * Metodo IniciarSesion recibe usuario y contraseña validar usuario y contraseña
+         */
+    
+        Usuario usuario = buscarPorUsername(username);
+    
+        if (usuario == null || !usuario.getPassword().equals(Crypto.encrypt(password, usuario.getUsername()))) {    
+          throw new BadCredentialsException("Usuario o contraseña invalida");
+        }
+    
+        return usuario;
+      }
+ 
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username);
+    }
+
+    public Usuario creaUsuario(String name, Integer country, Integer identificationType, String identification, Date birthDate, String username, String email, String password) {
+        
+        Persona persona = new Persona();
+        persona.setNombre(name);
+        persona.setPaisId(country);
+        persona.setTipoDocumentoId(identificationType);
+        persona.setDocumento(identification);
+        persona.setFechaNacimiento(birthDate);
+        
+        Usuario usuario = new Usuario();
+        usuario.setUsername(username);
+        usuario.setEmail(email);
+        usuario.setPassword(password);
+
+        persona.setUsuario(usuario);
+
+        personaService.grabar(persona);
+        
+
+        return usuario;
+
+
+    }
+
+
+
+    public Map<String, Object> getUserClaims(Usuario usuario) {
+        Map<String, Object> claims = new HashMap<>();
+    
+        claims.put("billeteraId", usuario.getPersona().getBilletera().getBilleteraId());
+    
+        return claims;
       }
+    
+    public UserDetails getUserAsUserDetail(Usuario usuario) {
+    UserDetails uDetails;
+
+    uDetails = new User(usuario.getUsername(), usuario.getPassword(), getAuthorities(usuario));
+
+    return uDetails;
+    }
+
+    private Set<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
+
+    Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+    Integer billeteraId = usuario.getPersona().getBilletera().getBilleteraId();
+
+    authorities.add(new SimpleGrantedAuthority("CLAIM_billeteraId_" + billeteraId));
+    return authorities;
+
+
+    }
+
+
 
 }

@@ -18,6 +18,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ar.com.billetera.api.services.JWTUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 
+/**
+ * Este es un filtro que se ejectue en cada request UNA sola ves(OncePerRequest)
+ */
+@Component
 public class JWTRequestFilter extends OncePerRequestFilter {
 
     @Autowired

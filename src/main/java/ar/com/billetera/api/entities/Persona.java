@@ -3,8 +3,10 @@ package ar.com.billetera.api.entities;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.persistence.Table;
 
-@Entity(name = "persona")
+@Entity
+@Table(name = "persona")
 public class Persona {
 
     @Id
@@ -17,7 +19,7 @@ public class Persona {
     @Column(name = "pais_id")
     private Integer paisId;
 
-    @Column(name = "tipo_documento")
+    @Column(name = "tipo_documento_id")
     private Integer tipoDocumentoId;
 
     private String documento;
@@ -30,6 +32,7 @@ public class Persona {
 
     @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
     private Billetera billetera;
+
 
     public Integer getPersonaId() {
         return this.personaId;

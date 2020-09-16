@@ -10,35 +10,49 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity(name = "transaccion")
+@Entity
+@Table(name = "transaccion")
 public class Transaccion {
     
     @Id
     @Column(name = "transaccion_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transaccionId;
+
     @ManyToOne
     @JoinColumn(name = "cuenta_id", referencedColumnName = "cuenta_id")
     private Cuenta cuenta;
+
     private Date fecha;
+
     @Column(name = "estado_id")
     private Integer estadoId;
+
     private BigDecimal importe;
+    
     private String moneda;
     @Column(name = "tipo_operacion")
     private Integer tipoOperacion;
+
     @Column(name = "concepto_operacion")
     private String conceptoOperacion;
+
     private String detalle;
+    
     @Column(name = "de_usuario_id")
     private Integer deUsuarioId;
+
     @Column(name = "a_usuario_id")
     private Integer aUsuarioId;
+
     @Column(name = "de_cuenta_id")
     private Integer deCuentaId;
+
     @Column(name = "a_cuenta_id")
     private Integer aCuentaId;
+
 
     public Integer getTransaccionId() {
         return transaccionId;
