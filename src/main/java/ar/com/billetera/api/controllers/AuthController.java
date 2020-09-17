@@ -28,7 +28,7 @@ public class AuthController {
     @Autowired
     UsuarioService usuarioService;
 
-    @PostMapping("auth/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<RegistrationResponse> postRegisterUser(@RequestBody RegistrationRequest req) {
 
         RegistrationResponse r = new RegistrationResponse();
@@ -44,7 +44,7 @@ public class AuthController {
 
  
 
-    @PostMapping("auth/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
         usuarioService.login(authenticationRequest.username, authenticationRequest.password);
 

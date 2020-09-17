@@ -1,5 +1,6 @@
 package ar.com.billetera.api.services;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ar.com.billetera.api.entities.Billetera;
+import ar.com.billetera.api.entities.Cuenta;
 import ar.com.billetera.api.entities.Persona;
 import ar.com.billetera.api.entities.Usuario;
 import ar.com.billetera.api.repos.UsuarioRepository;
@@ -27,6 +30,9 @@ public class UsuarioService {
 
     @Autowired
     PersonaService personaService;
+
+    @Autowired
+    BilleteraService billeteraService;
 
     public Usuario login(String username, String password) {
 
@@ -64,7 +70,29 @@ public class UsuarioService {
         persona.setUsuario(usuario);
 
         personaService.grabar(persona);
+
+        Billetera billetera = new Billetera();
+
+        Cuenta pesos = new Cuenta();
         
+        pesos.setSaldo(new BigDecimal(0));
+        pesos.setMoneda(("ARS"));
+
+        Cuenta dolares = new Cuenta();
+
+        dolares.setSaldo(new BigDecimal(0));
+        dolares.setMoneda("USD");
+
+        billetera.agregarCuenta(pesos);
+        billetera.agregarCuenta(dolares);
+
+        persona.setBilletera(billetera);
+
+        billeteraService.grabar(billetera);
+        
+        billeteraService.cargarSaldo(new BigDecimal(500), "ARS", billetera.getBilleteraId(), "regalo", "Bienvenida por creacion de usuario");        
+        
+        billeteraService.grabar(billetera);
 
         return usuario;
 
