@@ -5,6 +5,9 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.persistence.Table;
 
+import ar.com.billetera.api.entities.Pais.PaisEnum;
+import ar.com.billetera.api.entities.Pais.TipoDocuEnum;
+
 @Entity
 @Table(name = "persona")
 public class Persona {
@@ -50,20 +53,20 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public Integer getPaisId() {
-        return this.paisId;
+    public PaisEnum getPaisId() {
+        return PaisEnum.parse(this.paisId);
     }
 
-    public void setPaisId(Integer paisId) {
-        this.paisId = paisId;
+    public void setPaisId(PaisEnum paisId) {
+        this.paisId = paisId.getValue();
     }
 
-    public Integer getTipoDocumentoId() {
-        return this.tipoDocumentoId;
+    public TipoDocuEnum getTipoDocumentoId() {
+        return TipoDocuEnum.parse(this.tipoDocumentoId);
     }
 
-    public void setTipoDocumentoId(Integer tipoDocumentoId) {
-        this.tipoDocumentoId = tipoDocumentoId;
+    public void setTipoDocumentoId(TipoDocuEnum tipoDocumentoId) {
+        this.tipoDocumentoId = tipoDocumentoId.getValue();
     }
 
     public String getDocumento() {

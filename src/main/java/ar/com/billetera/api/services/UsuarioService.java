@@ -19,6 +19,8 @@ import ar.com.billetera.api.entities.Billetera;
 import ar.com.billetera.api.entities.Cuenta;
 import ar.com.billetera.api.entities.Persona;
 import ar.com.billetera.api.entities.Usuario;
+import ar.com.billetera.api.entities.Pais.PaisEnum;
+import ar.com.billetera.api.entities.Pais.TipoDocuEnum;
 import ar.com.billetera.api.repos.UsuarioRepository;
 import ar.com.billetera.api.security.Crypto;
 
@@ -35,14 +37,12 @@ public class UsuarioService {
     BilleteraService billeteraService;
 
     public Usuario login(String username, String password) {
-
         /**
          * Metodo IniciarSesion recibe usuario y contraseña validar usuario y contraseña
-         */
-    
+         */    
         Usuario usuario = buscarPorUsername(username);
     
-        if (usuario == null || !usuario.getPassword().equals(Crypto.encrypt(password, usuario.getUsername()))) {    
+        if (usuario == null || !usuario.getPassword().equals(Crypto.encrypt(password, usuario.getEmail()))) {    
           throw new BadCredentialsException("Usuario o contraseña invalida");
         }
     
@@ -53,19 +53,19 @@ public class UsuarioService {
         return usuarioRepository.findByUsername(username);
     }
 
-    public Usuario creaUsuario(String name, Integer country, Integer identificationType, String identification, Date birthDate, String username, String email, String password) {
+    public Usuario creaUsuario(String nombre, PaisEnum country, TipoDocuEnum identificationType, String identification, Date birthDate, String email, String password) {
         
         Persona persona = new Persona();
-        persona.setNombre(name);
+        persona.setNombre(nombre);
         persona.setPaisId(country);
         persona.setTipoDocumentoId(identificationType);
         persona.setDocumento(identification);
         persona.setFechaNacimiento(birthDate);
         
         Usuario usuario = new Usuario();
-        usuario.setUsername(username);
+        usuario.setUsername(email);
         usuario.setEmail(email);
-        usuario.setPassword(password);
+        usuario.setPassword(Crypto.encrypt(password, email));
 
         persona.setUsuario(usuario);
 
@@ -90,10 +90,8 @@ public class UsuarioService {
 
         billeteraService.grabar(billetera);
         
-        billeteraService.cargarSaldo(new BigDecimal(500), "ARS", billetera.getBilleteraId(), "regalo", "Bienvenida por creacion de usuario");        
+        billeteraService.cargarSaldo(new BigDecimal(500), "ARS", billetera, "regalo", "Bienvenida por creacion de usuario");        
         
-        billeteraService.grabar(billetera);
-
         return usuario;
 
 

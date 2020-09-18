@@ -33,7 +33,7 @@ public class AuthController {
 
         RegistrationResponse r = new RegistrationResponse();
         
-        Usuario usuario = usuarioService.creaUsuario(req.nombre, req.country, req.identificationType, req.identification, req.birthDate, req.username, req.email, req.password);
+        Usuario usuario = usuarioService.creaUsuario(req.fullName, req.country, req.identificationType, req.identification, req.birthDate, req.email, req.password);
 
         r.isOk = true;
         r.message = "Te registraste con exito!!!!";

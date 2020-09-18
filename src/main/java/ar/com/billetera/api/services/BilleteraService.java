@@ -23,9 +23,7 @@ public class BilleteraService {
         billeteraRepository.save(billetera);
     }
 
-    public void cargarSaldo(BigDecimal saldo, String moneda, Integer billeteraId, String conceptoOperacion, String detalle){
-
-        Billetera billetera = billeteraRepository.findByBilleteraId(billeteraId);
+    public void cargarSaldo(BigDecimal saldo, String moneda, Billetera billetera, String conceptoOperacion, String detalle){
 
         Cuenta cuenta = billetera.getCuenta(moneda);
    
@@ -37,7 +35,7 @@ public class BilleteraService {
         transaccion.setDetalle(detalle);
         transaccion.setImporte(saldo);
         transaccion.setTipoOperacion(1);
-        transaccion.setEstadoId(1);
+        transaccion.setEstadoId(2);
         transaccion.setDeCuentaId(cuenta.getCuentaId());
         transaccion.setDeUsuarioId(billetera.getPersona().getUsuario().getUsuarioId());
         transaccion.setaUsuarioId(billetera.getPersona().getUsuario().getUsuarioId());
@@ -45,19 +43,22 @@ public class BilleteraService {
         
         cuenta.agregarTransaccion(transaccion);
 
-        BigDecimal saldoActual = cuenta.getSaldo();
-        saldoActual.add(saldo);
-        cuenta.setSaldo(saldoActual);
-
-        
+        this.grabar(billetera);
     }
 
-    public Transaccion crearTransaccion() {
+    public BigDecimal consultarSaldo(Integer billeteraId, String moneda) {
 
-        Transaccion transaccion = new Transaccion();
+        Billetera billetera = billeteraRepository.findByBilleteraId(billeteraId);
 
-        return null;
+        Cuenta cuenta = billetera.getCuenta(moneda);
 
+        return cuenta.getSaldo();
+
+    }
+
+     public Billetera buscarPorId(Integer id) {
+
+        return billeteraRepository.findByBilleteraId(id);
     }
 
 
