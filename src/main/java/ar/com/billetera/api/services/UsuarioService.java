@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,20 @@ public class UsuarioService {
 
     }
 
+    public Usuario buscarPorEmail(String email) {
 
+      return usuarioRepository.findByEmail(email);
+    }
+  
+    public Usuario buscarPor(Integer id) {
+      Optional<Usuario> usuarioOp = usuarioRepository.findById(id);
+  
+      if (usuarioOp.isPresent()) {
+        return usuarioOp.get();
+      }
+  
+      return null;
+    }
 
     public Map<String, Object> getUserClaims(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
